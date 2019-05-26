@@ -18,7 +18,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: echo Done Update dependencies
       - setup_remote_docker
-      - run: docker login -u $DOCKER_USERNAME -u $DOCKER_PASSWORD
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run:
           name: "Build docker image and push to docker hub"
           command: |
