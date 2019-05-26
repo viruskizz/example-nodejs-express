@@ -16,4 +16,16 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - run: echo Done Update dependencies
+      - setup_remote_docker
+      - run: docker login -u $DOCKER_USERNAME -u $DOCKER_PASSWORD
+      - run:
+        name: "Build docker image and push to docker hub"
+        command: |
+          cp Dockerfile.production Dockerfile
+          docker build -t viruskizz/circleci-devops:latest .
+          docker build -t viruskizz/circleci-devops:${CIRCLE_SHA1} .
+          docker push viruskizz/circleci-devops:${CIRCLE_SHA1} .
+          docker push viruskizz/circleci-devops:${CIRCLE_SHA1} .
       - run: echo Done
+      
