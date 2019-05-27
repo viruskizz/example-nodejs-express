@@ -20,7 +20,8 @@ function format(seconds) {
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.status(200).json({
-    message: "update version 1.0",
+    message: "update version 1.1",
+    description: "batch_size = 5",
     env: config.env,
     uptime: format(process.uptime()),
     networkInterfaces: ifaces
