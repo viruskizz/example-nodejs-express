@@ -39,6 +39,6 @@ jobs:
             -e CATTLE_URL="$CATTLE_URL" \
             etlweather/gaucho upgrade $RANCHER_EXAMPLE_NODEJS \
             --imageUuid 'docker:viruskizz/circleci-devops:latest' \
-            --batch_size 3 --start_first \
+            --batch_size 5 --start_first \
             --auto_complete --timeout 600
       - run: echo "Finish"
