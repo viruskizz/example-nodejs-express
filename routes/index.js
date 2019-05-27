@@ -29,8 +29,8 @@ function format(seconds) {
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.status(200).json({
-    message: "update version 1.2",
-    description: "seperate job into workflow",
+    message: "update version 1.3",
+    description: "fix apm version",
     env: config.env,
     uptime: format(process.uptime()),
     networkInterfaces: ifaces

@@ -71,6 +71,7 @@ jobs:
       - image: circleci/node:8.11.1-stretch
     working_directory: ~/rep
     steps:
+      - setup_remote_docker
       - run:
           name: "Call to rancher to deploy"
           command: |
