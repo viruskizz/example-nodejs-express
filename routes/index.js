@@ -5,6 +5,15 @@ const ifaces = os.networkInterfaces();
 const config = require("../config.json")
 const calculator = require("../helper/calculator")
 
+var apm = require('elastic-apm-node').start({
+  // Set required service name (allowed characters: a-z, A-Z, 0-9, -, _, and space)
+  serviceName: 'example-api',
+  // Use if APM Server requires a token
+  secretToken: '',
+  // Set custom APM Server URL (default: http://localhost:8200)
+  serverUrl: 'http://apmna:8200'
+})
+
 function format(seconds) {
   function pad(s) {
     return (s < 10 ? '0' : '') + s;
@@ -20,8 +29,8 @@ function format(seconds) {
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.status(200).json({
-    message: "update version 1.1",
-    description: "batch_size = 5",
+    message: "update version 1.2",
+    description: "seperate job into workflow",
     env: config.env,
     uptime: format(process.uptime()),
     networkInterfaces: ifaces

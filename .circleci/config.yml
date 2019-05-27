@@ -19,6 +19,42 @@ jobs:
       - run: echo Done Update dependencies
       - run: npm test
       - run: echo Test Successful
+  test:
+    docker:
+      - image: circleci/node:8.11.1-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback 
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: echo Done Update dependencies
+      - run: npm test
+      - run: echo Test Successful
+  ship:
+    docker:
+      - image: circleci/node:8.11.1-stretch
+    working_directory: ~/rep
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback 
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: echo Done Update dependencies
       - setup_remote_docker
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - run:
@@ -29,7 +65,12 @@ jobs:
             docker build -t viruskizz/circleci-devops:${CIRCLE_SHA1} .
             docker push viruskizz/circleci-devops:latest
             docker push viruskizz/circleci-devops:${CIRCLE_SHA1}
-      - run: echo Build Project successful
+      - run: echo Ship Project successful
+  deploy:
+    docker:
+      - image: circleci/node:8.11.1-stretch
+    working_directory: ~/rep
+    steps:
       - run:
           name: "Call to rancher to deploy"
           command: |
@@ -42,3 +83,20 @@ jobs:
             --batch_size 5 --start_first \
             --auto_complete --timeout 600
       - run: echo "Finish"
+workflows:
+  version: 2
+  build_test_ship_deploy:
+    jobs:
+      - build
+      - test:
+         requires:
+          - build
+      - ship:
+          requires:
+            - build
+            - test
+      - deploy:
+          requires:
+            - build
+            - test
+            - ship
